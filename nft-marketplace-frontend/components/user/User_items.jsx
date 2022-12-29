@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Activity_item from "../collectrions/Activity_item";
-import Image from "next/image";
-import Feature_collections_data from "../../data/Feature_collections_data";
-import Trending_categories_items from "../categories/trending_categories_items";
+import 'react-tabs/style/react-tabs.css';
 
-import "react-tabs/style/react-tabs.css";
-import Explore_collection_item from "../collectrions/explore_collection_item";
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+
+import axiosInstance from '../../utils/axiosInterceptor';
+import { getItem } from '../../utils/localStorage';
+import Trending_categories_items from '../categories/trending_categories_items';
+import Activity_item from '../collectrions/Activity_item';
+import Explore_collection_item from '../collectrions/explore_collection_item';
 
 const User_items = () => {
   const [itemActive, setItemActive] = useState(1);
+  const [data, setData] = useState([]);
   const tabItem = [
     {
       id: 1,
@@ -37,6 +40,38 @@ const User_items = () => {
       icon: "activity"
     }
   ];
+  
+  const loadOnSaleItems = async () => {
+    await axiosInstance
+      .post("/nft/getNft", { isBuy: false })
+      .then((res) => setData(res.data))
+      .catch((err) => console.log(err, "it has an error"));
+  };
+
+  const loadOwnedItems = async () => {
+    await axiosInstance
+      .post("/nft/getNft", { address: getItem("userAddress") })
+      .then((res) => setData(res.data))
+      .catch((err) => console.log(err, "it has an error"));
+  };
+  
+  const loadCreatedItems = async () => {
+    await axiosInstance
+      .post("/nft/getNft", { address: getItem("userAddress") })
+      .then((res) => setData(res.data))
+      .catch((err) => console.log(err, "it has an error"));
+  };
+  useEffect(() => {
+    if (itemActive === 1) {
+      loadOnSaleItems();
+    } else if (itemActive === 2) {
+      loadOwnedItems();
+
+    } else if(itemActive === 3) {
+      loadCreatedItems()      
+    }
+  }, [itemActive])
+  
   return (
     <>
       <section className="relative py-24">
@@ -83,19 +118,19 @@ const User_items = () => {
             <TabPanel>
               <div>
                 {/* <!-- Filter --> */}
-                <Trending_categories_items />
+                <Trending_categories_items data={data} />
               </div>
             </TabPanel>
             <TabPanel>
               <div>
                 {/* <!-- Filter --> */}
-                <Trending_categories_items />
+                <Trending_categories_items data={data} />
               </div>
             </TabPanel>
             <TabPanel>
               <div>
                 {/* <!-- Filter --> */}
-                <Trending_categories_items />
+                <Trending_categories_items data={data} />
               </div>
             </TabPanel>
             <TabPanel>

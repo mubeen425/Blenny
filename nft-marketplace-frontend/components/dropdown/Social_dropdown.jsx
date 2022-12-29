@@ -1,9 +1,11 @@
-import React from 'react';
-import Link from 'next/link';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css'; // optional
+import 'tippy.js/dist/tippy.css';
 
-const Social_dropdown = () => {
+import Tippy from '@tippyjs/react';
+import Link from 'next/link';
+import React from 'react';
+
+const Social_dropdown = ({ links }) => {
+	console.log({links})
 	return (
 		<>
 			<div className="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 dropdown hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white">
@@ -33,7 +35,7 @@ const Social_dropdown = () => {
 									<span className="mt-1 inline-block">Facebook</span>
 								</a>
 							</Link>
-							<Link href="#">
+							<Link href={`https://twitter.com/${links?.twitter}`} target="_blank">
 								<a className="dark:hover:bg-jacarta-600 font-display hover:bg-jacarta-50 flex w-full items-center rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white">
 									<svg
 										aria-hidden="true"

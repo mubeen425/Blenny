@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useMetaMask } from "metamask-react";
-import { useDispatch, useSelector } from "react-redux";
-import { Logintrue, walletModalShow } from "../../redux/counterSlice";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { ethers } from "ethers";
-import axios from "axios";
-import axiosInstance from "../../utils/axiosInterceptor";
-import { getItem, saveItem } from "../../utils/localStorage";
+import { ethers } from 'ethers';
+import { useMetaMask } from 'metamask-react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Logintrue, walletModalShow } from '../../redux/counterSlice';
+import axiosInstance from '../../utils/axiosInterceptor';
+import { getItem, saveItem } from '../../utils/localStorage';
 
 const Metamask_comp_text = () => {
   const { status, connect, account, ethereum } = useMetaMask();

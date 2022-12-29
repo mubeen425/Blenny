@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import Likes from "../likes";
-import Auctions_dropdown from "../dropdown/Auctions_dropdown";
-import { useDispatch, useSelector } from "react-redux";
-import { buyModalShow, setCategoryItem } from "../../redux/counterSlice";
-import axios from "axios";
-import axiosInstance from "../../utils/axiosInterceptor";
+import 'tippy.js/dist/tippy.css';
 
-const CategoryItem = () => {
+import Tippy from '@tippyjs/react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { buyModalShow, setCategoryItem } from '../../redux/counterSlice';
+import Auctions_dropdown from '../dropdown/Auctions_dropdown';
+import Likes from '../likes';
+
+const CategoryItem = ({data}) => {
   const { sortedtrendingCategoryItemData, buyModal } = useSelector(
     (state) => state.counter
   );
-  const [data, setData] = useState([]);
 
   const dispatch = useDispatch();
 
-  const loadMarketplaceItems = async () => {
-    await axiosInstance
-      .post("/nft/getNft", { isBuy: false })
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err, "it has an error"));
-
-    //{console.log(res.data)}
-    //setItems(items)
-    //setLoading(false)
-  };
-  useEffect(() => {
-    loadMarketplaceItems();
-  }, [buyModal]);
+ 
   console.log("data", { data });
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">

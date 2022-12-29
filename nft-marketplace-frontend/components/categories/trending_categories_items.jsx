@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { tranding_category_filter } from '../../data/categories_data';
-import CategoryItem from './categoryItem';
-import { trendingCategoryData } from '../../data/categories_data';
-import Tippy from '@tippyjs/react';
-import Recently_added_dropdown from '../dropdown/recently_added_dropdown';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateTrendingCategoryItemData } from '../../redux/counterSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Trending_categories_items = () => {
-	const [itemdata, setItemdata] = useState(trendingCategoryData);
+import { tranding_category_filter } from '../../data/categories_data';
+import { updateTrendingCategoryItemData } from '../../redux/counterSlice';
+import Recently_added_dropdown from '../dropdown/recently_added_dropdown';
+import CategoryItem from './categoryItem';
+
+const Trending_categories_items = ({data}) => {
+	const [itemdata, setItemdata] = useState(data);
 	const dispatch = useDispatch();
 	const { trendingCategorySorText } = useSelector((state) => state.counter);
 	const [filterVal, setFilterVal] = useState(0);
 
 	const handleFilter = (category) => {
 		if (category !== 'all') {
-			setItemdata(trendingCategoryData.filter((item) => item.category === category));
+			setItemdata(data.filter((item) => item.category === category));
 		} else {
-			setItemdata(trendingCategoryData);
+			setItemdata(data);
 		}
 	};
 
@@ -42,7 +41,7 @@ const Trending_categories_items = () => {
 
 	useEffect(() => {
 		dispatch(updateTrendingCategoryItemData(itemdata.slice(0, 8)));
-	}, [itemdata, dispatch]);
+	}, [itemdata]);
 
 	return (
 		<>
@@ -106,7 +105,7 @@ const Trending_categories_items = () => {
 			</div>
 
 			{/* <!-- Grid --> */}
-			<CategoryItem />
+			<CategoryItem data={data} />
 		</>
 	);
 };

@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
-import Link from "next/link";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import Meta from "../../components/Meta";
-import { Metamask_comp_login } from "../../components/metamask/Metamask";
+import 'react-tabs/style/react-tabs.css';
+
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+
+import Meta from '../../components/Meta';
+import { Metamask_comp_login } from '../../components/metamask/Metamask';
 
 const Login = () => {
   const [itemActive, setItemActive] = useState(1);
@@ -90,7 +92,7 @@ const Login = () => {
                           }
                         >
                           <svg className="icon icon-ETH mr-1 mb-[2px] h-4 w-4 fill-current">
-                            <use xlinkHref={`/icons.svg#icon-${icon}`}></use>
+                            <use xlinkHref={`/icons.svg#icon-${icon}`} />
                           </svg>
 
                           <span className="font-display text-base font-medium">
