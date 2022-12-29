@@ -4,28 +4,38 @@ const nftSchema = new mongoose.Schema(
     id: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     name: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true
     },
     price: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     img: {
       data: Buffer,
-     contentType: String,
+      contentType: String
     },
-    isBuy:{
-      type: Boolean,
+    isBuy: {
+      type: Boolean
     },
     owner: {
       type: String,
+      required: true
+    },
+    category: {
+      type: String,
       required: true,
+      trim: true
     }
   },
   { timestamps: true }
