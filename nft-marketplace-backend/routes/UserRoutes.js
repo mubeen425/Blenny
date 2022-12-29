@@ -38,6 +38,7 @@ Userrouter.post("/login", async (req, res) => {
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: function (req, file, cb) {
+    console.log(file);
     cb(null, file.originalname);
   }
 });
@@ -50,60 +51,80 @@ Userrouter.put(
     { name: "coverImage", maxCount: 1 },
     { name: "profileImage", maxCount: 1 }
   ]),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       console.log("request data ", req.body, req.files);
-      const updateData = {
+      let updateData = {
         username: req.body.username,
         bio: req.body.bio,
         email: req.body.email,
-        coverImage: {
-          data: fs.readFileSync("uploads/" + req.files[0].filename),
-          contentType: "image/png"
-        },
-        profileImage: {
-          data: fs.readFileSync("uploads/" + req.files[1].filename),
-          contentType: "image/png"
-        },
         links: {
           twitter: req.body.twitter,
           instagram: req.body.instagram,
           site: req.body.site
         }
       };
+      if (req.files.length > 0) {
+        console.log("files: ", req.files);
+        req.files.forEach(function (file) {
+          console.log("file: ", file);
+          if (file.fieldname === "profileImage") {
+            console.log("call profile");
+            updateData = {
+              ...updateData,
+              profileImage: {
+                data: fs.readFileSync("uploads/" + file.filename),
+                contentType: "image/png"
+              }
+            };
+          }
+          if (file.fieldname === "coverImage") {
+            console.log("call cover");
+
+            updateData = {
+              ...updateData,
+              coverImage: {
+                data: fs.readFileSync("uploads/" + file.filename),
+                contentType: "image/png"
+              }
+            };
+          }
+        });
+      }
+
       console.log(updateData);
-      const res = await USERS.findOneAndUpdate(
-        {
-          address: req.body.address
-        },
-        updateData
-      );
-      console.log("res", res);
-      res.status(200).json({
-        message: "User updated successfully"
+      let user = await USERS.findOne({
+        address: req.body.address
       });
+      console.log("user", user);
+      if (user) {
+        const result = await user.update(updateData);
+        console.log(result);
+        res.status(200).send("User update successfully");
+      } else {
+        console.log("else call", user);
+        res.status(404).send("User not found. Please login again");
+      }
     } catch (error) {
       console.log("error: ", error);
-      res.json(error);
+      res.status(400).send({ error: error, data: error.message });
     }
   }
 );
 // Get Particular User by Address
 Userrouter.get("/profile/:address", async (req, res) => {
   const address = req.params.address;
-  // console.log(address);
+  console.log(address);
   let user;
   try {
     user = await USERS.findOne({ address: address });
+    if (!user) {
+      return res.status(404).json("User Not found");
+    }
+    return res.status(200).json({ user: user });
   } catch (error) {
-    return res
-      .status(404)
-      .json({ error: error, message: "Error in try catch" });
+    return res.status(404).json(error.message);
   }
-  if (!user) {
-    return res.status(404).json({ message: "Ueer Not found " });
-  }
-  return res.status(200).json({ user: user });
 });
 
 // get all
