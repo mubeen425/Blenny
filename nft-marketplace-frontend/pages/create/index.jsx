@@ -1,24 +1,23 @@
-import React, { useState } from "react";
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css"; // optional
-import Collection_dropdown2 from "../../components/dropdown/collection_dropdown2";
-import {
-  collectionDropdown2_data,
-  EthereumDropdown2_data
-} from "../../data/dropdown";
-import { FileUploader } from "react-drag-drop-files";
-import Proparties_modal from "../../components/modal/proparties_modal";
-import { useDispatch, useSelector } from "react-redux";
-import { showPropatiesModal } from "../../redux/counterSlice";
-import Meta from "../../components/Meta";
-import { ethers } from "ethers";
-import ContractABI from "../../contractABI/ABI.json";
-import { pinJSONToIPFS } from "../../contractABI/pinata.js";
-import { loadContracts } from "../../contractABI/interact.js";
-import axios from "axios";
-import Link from "next/link";
-import Router, { useRouter } from "next/router";
-import axiosInstance from "../../utils/axiosInterceptor";
+import 'tippy.js/dist/tippy.css';
+
+import Tippy from '@tippyjs/react';
+import { ethers } from 'ethers';
+import Link from 'next/link';
+import Router, { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { FileUploader } from 'react-drag-drop-files';
+import { useDispatch, useSelector } from 'react-redux';
+
+import CategoryDropdown from '../../components/dropdown/categoryDropdown';
+import Collection_dropdown2 from '../../components/dropdown/collection_dropdown2';
+import Meta from '../../components/Meta';
+import Proparties_modal from '../../components/modal/proparties_modal';
+import { loadContracts } from '../../contractABI/interact.js';
+import { pinJSONToIPFS } from '../../contractABI/pinata.js';
+import { tranding_categories } from '../../data/categories_data';
+import { collectionDropdown2_data, EthereumDropdown2_data } from '../../data/dropdown';
+import { showPropatiesModal } from '../../redux/counterSlice';
+import axiosInstance from '../../utils/axiosInterceptor';
 
 const Create = () => {
   const fileTypes = [
@@ -36,7 +35,7 @@ const Create = () => {
   ];
 
   const router = useRouter();
-  const { loggedin } = useSelector((state) => state.counter);
+  const { loggedin } = useSelector(state => state.counter);
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
@@ -60,7 +59,8 @@ const Create = () => {
     Supply: "",
     Blockchain: "Ethereum",
     FreezeMetadata: "",
-    price: ""
+    price: "",
+    category: "art"
   });
 
   const mintNFT = async () => {
@@ -71,9 +71,9 @@ const Create = () => {
       // input.FreezeMetadata == "" &&
       input.price == "" ||
       input.image == "" ||
-      input.description == ""
+      input.description == "" ||
+      input.category == ""
     ) {
-      // alert("Fill the all fields")
       setError({
         status: true,
         message: "Please fill all fields"
@@ -145,10 +145,12 @@ const Create = () => {
         const formData = new FormData();
         formData.append("id", id);
         formData.append("name", input.name);
+        formData.append("description", input.description);
         formData.append("price", input.price);
         formData.append("nftImage", input.image);
         formData.append("isBuy", false);
         formData.append("owner", address);
+        formData.append("category", input.category);
         console.log({ formData }, input.image);
         const res = await axiosInstance.post("/nft/createNft", formData, {});
 
@@ -163,25 +165,42 @@ const Create = () => {
         console.log("res", res);
       }
     } catch (err) {
-      console.log("create error", err.message);
-      setLoading(false);
-      setError({
-        status: true,
-        message: "Something went wrong! Please try again"
-      });
+      console.log("create error", err.code);
+      if (err.code === "ACTION_REJECTED") {
+        setLoading(false);
+        setError({
+          status: true,
+          message: "Request rejected by user"
+        });
+      } else {
+        setLoading(false);
+        setError({
+          status: true,
+          message: "Something went wrong! Please try again"
+        });
+      }
     }
   };
 
   // Get value from the collection component for the input.Collection
-  const Get_collection_Value = (Collectionvalue) => {
-    setinput((prevState) => ({
+  const Get_collection_Value = Collectionvalue => {
+    setinput(prevState => ({
       ...prevState,
       Collection: { Collectionvalue }
     }));
   };
+
+  // Get value from the category component for the input.Collection
+  const Get_Category_Value = categoryValue => {
+    console.log("category value", categoryValue);
+    setinput(prevState => ({
+      ...prevState,
+      category: categoryValue
+    }));
+  };
   // Get value from the collection component for the input.Blockchain
-  const Get_Value_Blockchain = (Blockchainvalue) => {
-    setinput((prevState) => ({
+  const Get_Value_Blockchain = Blockchainvalue => {
+    setinput(prevState => ({
       ...prevState,
       // Blockchain: { Blockchainvalue }, //old
       Blockchain: 97
@@ -189,16 +208,16 @@ const Create = () => {
   };
   const dispatch = useDispatch();
 
-  const handleChangeImage = (file) => {
+  const handleChangeImage = file => {
     setFile(file.name);
-    setinput((prevState) => ({
+    setinput(prevState => ({
       ...prevState,
       // image: file.name, //old
       image: file
     }));
   };
-  const handleChange = (e) => {
-    setinput((prevState) => ({
+  const handleChange = e => {
+    setinput(prevState => ({
       ...prevState,
       [e.target.name]: e.target.value
     }));
@@ -249,15 +268,13 @@ const Create = () => {
                 <span className="text-red">*</span>
               </label>
 
-              {file ? (
-                <p className="dark:text-jacarta-300 text-2xs mb-3">
-                  successfully uploaded : {file}
-                </p>
-              ) : (
-                <p className="dark:text-jacarta-300 text-2xs mb-3">
-                  Drag or choose your file to upload
-                </p>
-              )}
+              {file
+                ? <p className="dark:text-jacarta-300 text-2xs mb-3">
+                    successfully uploaded : {file}
+                  </p>
+                : <p className="dark:text-jacarta-300 text-2xs mb-3">
+                    Drag or choose your file to upload
+                  </p>}
 
               <div className="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 group relative flex max-w-md flex-col items-center justify-center rounded-lg border-2 border-dashed bg-white py-20 px-5 text-center">
                 <div className="relative z-10 cursor-pointer">
@@ -354,7 +371,7 @@ const Create = () => {
                 rows="4"
                 required
                 placeholder="Provide a detailed description of your item."
-              ></textarea>
+              />
             </div>
 
             {/* <!-- Collection --> */}
@@ -383,8 +400,8 @@ const Create = () => {
                           height="24"
                           className="dark:fill-jacarta-300 fill-jacarta-500 ml-1 -mb-[3px] h-4 w-4"
                         >
-                          <path fill="none" d="M0 0h24v24H0z"></path>
-                          <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z"></path>
+                          <path fill="none" d="M0 0h24v24H0z" />
+                          <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z" />
                         </svg>
                       </span>
                     </Tippy>
@@ -412,14 +429,16 @@ const Create = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex">
                       <svg className="icon fill-jacarta-700 mr-2 mt-px h-4 w-4 shrink-0 dark:fill-white">
-                        <use xlinkHref={`/icons.svg#icon-${icon}`}></use>
+                        <use xlinkHref={`/icons.svg#icon-${icon}`} />
                       </svg>
 
                       <div>
                         <label className="font-display text-jacarta-700 block dark:text-white">
                           {name}
                         </label>
-                        <p className="dark:text-jacarta-300">{text}</p>
+                        <p className="dark:text-jacarta-300">
+                          {text}
+                        </p>
                       </div>
                     </div>
                     <button
@@ -474,7 +493,7 @@ const Create = () => {
                 <input
                   value={input.Unlockable_Content}
                   onChange={() => {
-                    setinput((prevState) => ({
+                    setinput(prevState => ({
                       ...prevState,
                       Unlockable_Content: !input.Unlockable_Content
                     }));
@@ -527,8 +546,8 @@ const Create = () => {
                             height="24"
                             className="dark:fill-jacarta-300 fill-jacarta-500 ml-2 -mb-[2px] h-4 w-4"
                           >
-                            <path fill="none" d="M0 0h24v24H0z"></path>
-                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z"></path>
+                            <path fill="none" d="M0 0h24v24H0z" />
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z" />
                           </svg>
                         </span>
                       </Tippy>
@@ -538,10 +557,9 @@ const Create = () => {
                 <input
                   value={input.Explicit_Sensitive_Content}
                   onChange={() => {
-                    setinput((prevState) => ({
+                    setinput(prevState => ({
                       ...prevState,
-                      Explicit_Sensitive_Content:
-                        !input.Explicit_Sensitive_Content
+                      Explicit_Sensitive_Content: !input.Explicit_Sensitive_Content
                     }));
                   }}
                   type="checkbox"
@@ -550,7 +568,23 @@ const Create = () => {
                 />
               </div>
             </div>
+            {/* Category */}
 
+            <div className="relative">
+              <div>
+                <label className="font-display text-jacarta-700 mb-2 block dark:text-white">
+                  Select Category
+                </label>
+              </div>
+
+              {/* dropdown */}
+              <div className="my-1 cursor-pointer">
+                <CategoryDropdown
+                  data={tranding_categories}
+                  Get_Value={Get_Category_Value}
+                />
+              </div>
+            </div>
             {/* <!-- Supply --> */}
             <div className="mb-6">
               <label
@@ -581,8 +615,8 @@ const Create = () => {
                         height="24"
                         className="dark:fill-jacarta-300 fill-jacarta-500 ml-1 -mb-[3px] h-4 w-4"
                       >
-                        <path fill="none" d="M0 0h24v24H0z"></path>
-                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z"></path>
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z" />
                       </svg>
                     </span>
                   </Tippy>
@@ -646,8 +680,8 @@ const Create = () => {
                       height="24"
                       className="dark:fill-jacarta-300 fill-jacarta-500 mb-[2px] h-5 w-5"
                     >
-                      <path fill="none" d="M0 0h24v24H0z"></path>
-                      <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z"></path>
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z" />
                     </svg>
                   </span>
                 </Tippy>
@@ -685,79 +719,75 @@ const Create = () => {
             {/* <!-- Submit --> */}
 
             <div className="flex flex-col md:flex-row text-center space-x-6 ">
-              {loggedin ? (
-                <span>
-                  {" "}
-                  {loading ? (
-                    <div role="status">
-                      <svg
-                        aria-hidden="true"
-                        className="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                        viewBox="0 0 100 101"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+              {loggedin
+                ? <span>
+                    {" "}{loading
+                      ? <div role="status">
+                          <svg
+                            aria-hidden="true"
+                            className="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            viewBox="0 0 100 101"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                              fill="currentFill"
+                            />
+                          </svg>
+                          <span className="text-green">
+                            {!success.status && success.message}
+                            {success.status &&
+                              success.message === "" &&
+                              "Please wait your NFT creation take time..."}
+                          </span>
+                        </div>
+                      : <button
+                          id="CreateButton"
+                          // onClick={CreateNFT}
+                          onClick={mintNFT}
+                          className=" bg-accent-dark cursor-pointer rounded-full py-3 px-8 text-center font-semibold text-white transition-all"
+                        >
+                          Create
+                        </button>}
+                    {error.status === true &&
+                      <p
+                        id="Error"
+                        className="py-3 font-semibold text-red transition-all"
                       >
-                        <path
-                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                          fill="currentFill"
-                        />
-                      </svg>
-                      <span className="text-green">
-                        {!success.status && success.message}
-                        {success.status &&
-                          success.message === "" &&
-                          "Please wait your NFT creation take time..."}
-                      </span>
-                    </div>
-                  ) : (
-                    <button
-                      id="CreateButton"
-                      // onClick={CreateNFT}
-                      onClick={mintNFT}
-                      className=" bg-accent-dark cursor-pointer rounded-full py-3 px-8 text-center font-semibold text-white transition-all"
-                    >
-                      Create
-                    </button>
-                  )}
-                  {error.status === true && (
+                        <span>
+                          {error.message}
+                        </span>
+                      </p>}
+                    {success.status === true &&
+                      <p
+                        id="Error"
+                        className="py-3 font-semibold text-green transition-all"
+                      >
+                        <span>
+                          {success.message}
+                        </span>
+                      </p>}
+                  </span>
+                : <span className="flex space-x-3">
+                    {" "}<Link href="/login">
+                      <a>
+                        <button className=" bg-accent-dark cursor-pointer rounded-full py-3 px-8 text-center font-semibold text-white transition-all">
+                          Login
+                        </button>{" "}
+                      </a>
+                    </Link>
                     <p
                       id="Error"
-                      className="py-3 font-semibold text-red transition-all"
+                      className=" py-3 font-semibold text-red transition-all"
                     >
-                      <span>{error.message}</span>
+                      <span>You have to login first</span>
                     </p>
-                  )}
-                  {success.status === true && (
-                    <p
-                      id="Error"
-                      className="py-3 font-semibold text-green transition-all"
-                    >
-                      <span>{success.message}</span>
-                    </p>
-                  )}
-                </span>
-              ) : (
-                <span className="flex space-x-3">
-                  {" "}
-                  <Link href="/login">
-                    <a>
-                      <button className=" bg-accent-dark cursor-pointer rounded-full py-3 px-8 text-center font-semibold text-white transition-all">
-                        Login
-                      </button>{" "}
-                    </a>
-                  </Link>
-                  <p
-                    id="Error"
-                    className=" py-3 font-semibold text-red transition-all"
-                  >
-                    <span>You have to login first</span>
-                  </p>
-                </span>
-              )}
+                  </span>}
             </div>
           </div>
         </div>

@@ -44,20 +44,23 @@ const User_items = () => {
   const loadOnSaleItems = async () => {
     await axiosInstance
       .post("/nft/getNft", { isBuy: false })
-      .then((res) => setData(res.data))
+      .then((res) => {
+        console.log("loaded", res.data);
+        setData(res.data)
+      })
       .catch((err) => console.log(err, "it has an error"));
   };
 
   const loadOwnedItems = async () => {
     await axiosInstance
-      .post("/nft/getNft", { address: getItem("userAddress") })
+      .post("/nft/getNft", { owner: getItem("userAddress") , isBuy: true})
       .then((res) => setData(res.data))
       .catch((err) => console.log(err, "it has an error"));
   };
   
   const loadCreatedItems = async () => {
     await axiosInstance
-      .post("/nft/getNft", { address: getItem("userAddress") })
+      .post("/nft/getNft", { owner: getItem("userAddress") })
       .then((res) => setData(res.data))
       .catch((err) => console.log(err, "it has an error"));
   };

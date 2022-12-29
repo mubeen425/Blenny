@@ -1,39 +1,39 @@
 const tranding_category_filter = [
   {
     id: 0,
-    text: "all",
+    text: "all"
   },
   {
     id: 1,
     svg: "art",
-    text: "art",
+    text: "art"
   },
 
   {
     id: 2,
     svg: "collection",
-    text: "Collectibles",
+    text: "collectibles"
   },
   {
     id: 3,
     svg: "domain",
-    text: "domain",
+    text: "domain"
   },
   {
     id: 4,
     svg: "music",
-    text: "music",
+    text: "music"
   },
   {
     id: 5,
     svg: "photography",
-    text: "photography",
+    text: "photography"
   },
   {
     id: 6,
     svg: "world",
-    text: "virtual world",
-  },
+    text: "virtual world"
+  }
 ];
 
 const trendingCategoryData = [
@@ -53,12 +53,12 @@ const trendingCategoryData = [
     likes: 15,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_1.png",
+      image: "/images/avatars/creator_1.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_1.png",
-    },
+      image: "/images/avatars/owner_1.png"
+    }
   },
   {
     image: "/images/products/item_4.jpg",
@@ -76,12 +76,12 @@ const trendingCategoryData = [
     likes: 188,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_2.png",
+      image: "/images/avatars/creator_2.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_2.png",
-    },
+      image: "/images/avatars/owner_2.png"
+    }
   },
   {
     image: "/images/products/item_7.jpg",
@@ -99,12 +99,12 @@ const trendingCategoryData = [
     likes: 160,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_3.png",
-    },
+      image: "/images/avatars/owner_3.png"
+    }
   },
   {
     image: "/images/products/item_6.jpg",
@@ -122,12 +122,12 @@ const trendingCategoryData = [
     likes: 159,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_4.png",
+      image: "/images/avatars/creator_4.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
   {
     image: "/images/products/item_8.jpg",
@@ -145,12 +145,12 @@ const trendingCategoryData = [
     likes: 32,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_9.jpg",
@@ -168,12 +168,12 @@ const trendingCategoryData = [
     likes: 25,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_6.png",
+      image: "/images/avatars/creator_6.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
   {
     image: "/images/products/item_10.jpg",
@@ -191,12 +191,12 @@ const trendingCategoryData = [
     likes: 55,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_2.png",
+      image: "/images/avatars/creator_2.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_7.png",
-    },
+      image: "/images/avatars/owner_7.png"
+    }
   },
   {
     image: "/images/products/item_11.jpg",
@@ -214,12 +214,12 @@ const trendingCategoryData = [
     likes: 70,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_8.png",
+      image: "/images/avatars/creator_8.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_11.jpg",
@@ -237,12 +237,12 @@ const trendingCategoryData = [
     likes: 70,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_8.png",
+      image: "/images/avatars/creator_8.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_12_lg.jpg",
@@ -260,12 +260,12 @@ const trendingCategoryData = [
     likes: 188,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_2.png",
+      image: "/images/avatars/creator_2.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_2.png",
-    },
+      image: "/images/avatars/owner_2.png"
+    }
   },
 
   {
@@ -284,12 +284,12 @@ const trendingCategoryData = [
     likes: 160,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_3.png",
-    },
+      image: "/images/avatars/owner_3.png"
+    }
   },
   {
     image: "/images/products/item_14_lg.jpg",
@@ -307,12 +307,12 @@ const trendingCategoryData = [
     likes: 159,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_4.png",
+      image: "/images/avatars/creator_4.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
   {
     image: "/images/products/item_15_lg.jpg",
@@ -330,12 +330,12 @@ const trendingCategoryData = [
     likes: 32,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_16_lg.jpg",
@@ -353,12 +353,12 @@ const trendingCategoryData = [
     likes: 25,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_6.png",
+      image: "/images/avatars/creator_6.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
 
   {
@@ -377,12 +377,12 @@ const trendingCategoryData = [
     likes: 15,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_1.png",
+      image: "/images/avatars/creator_1.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_1.png",
-    },
+      image: "/images/avatars/owner_1.png"
+    }
   },
   {
     image: "/images/products/item_4.jpg",
@@ -400,12 +400,12 @@ const trendingCategoryData = [
     likes: 188,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_2.png",
+      image: "/images/avatars/creator_2.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_2.png",
-    },
+      image: "/images/avatars/owner_2.png"
+    }
   },
   {
     image: "/images/products/item_7.jpg",
@@ -423,12 +423,12 @@ const trendingCategoryData = [
     likes: 160,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_3.png",
-    },
+      image: "/images/avatars/owner_3.png"
+    }
   },
   {
     image: "/images/products/item_6.jpg",
@@ -446,12 +446,12 @@ const trendingCategoryData = [
     likes: 159,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_4.png",
+      image: "/images/avatars/creator_4.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
   {
     image: "/images/products/item_8.jpg",
@@ -469,12 +469,12 @@ const trendingCategoryData = [
     likes: 32,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_9.jpg",
@@ -492,12 +492,12 @@ const trendingCategoryData = [
     likes: 25,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_6.png",
+      image: "/images/avatars/creator_6.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
   {
     image: "/images/products/item_10.jpg",
@@ -515,12 +515,12 @@ const trendingCategoryData = [
     likes: 55,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_2.png",
+      image: "/images/avatars/creator_2.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_7.png",
-    },
+      image: "/images/avatars/owner_7.png"
+    }
   },
   {
     image: "/images/products/item_11.jpg",
@@ -538,12 +538,12 @@ const trendingCategoryData = [
     likes: 70,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_8.png",
+      image: "/images/avatars/creator_8.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_11.jpg",
@@ -561,12 +561,12 @@ const trendingCategoryData = [
     likes: 70,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_8.png",
+      image: "/images/avatars/creator_8.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_12_lg.jpg",
@@ -584,12 +584,12 @@ const trendingCategoryData = [
     likes: 188,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_2.png",
+      image: "/images/avatars/creator_2.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_2.png",
-    },
+      image: "/images/avatars/owner_2.png"
+    }
   },
 
   {
@@ -608,12 +608,12 @@ const trendingCategoryData = [
     likes: 160,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_3.png",
-    },
+      image: "/images/avatars/owner_3.png"
+    }
   },
   {
     image: "/images/products/item_14_lg.jpg",
@@ -631,12 +631,12 @@ const trendingCategoryData = [
     likes: 159,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_4.png",
+      image: "/images/avatars/creator_4.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
+      image: "/images/avatars/owner_4.png"
+    }
   },
   {
     image: "/images/products/item_15_lg.jpg",
@@ -654,12 +654,12 @@ const trendingCategoryData = [
     likes: 32,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_3.png",
+      image: "/images/avatars/creator_3.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_5.png",
-    },
+      image: "/images/avatars/owner_5.png"
+    }
   },
   {
     image: "/images/products/item_16_lg.jpg",
@@ -677,13 +677,45 @@ const trendingCategoryData = [
     likes: 25,
     creator: {
       name: "Sussygirl",
-      image: "/images/avatars/creator_6.png",
+      image: "/images/avatars/creator_6.png"
     },
     owner: {
       name: "Sussygirl",
-      image: "/images/avatars/owner_4.png",
-    },
-  },
+      image: "/images/avatars/owner_4.png"
+    }
+  }
 ];
+const tranding_categories = [
+  {
+    id: 0,
+    svg: "art",
+    text: "art"
+  },
 
-export { tranding_category_filter, trendingCategoryData };
+  {
+    id: 1,
+    svg: "collection",
+    text: "collectibles"
+  },
+  {
+    id: 2,
+    svg: "domain",
+    text: "domain"
+  },
+  {
+    id: 3,
+    svg: "music",
+    text: "music"
+  },
+  {
+    id: 4,
+    svg: "photography",
+    text: "photography"
+  },
+  {
+    id: 5,
+    svg: "world",
+    text: "virtual world"
+  }
+];
+export { tranding_category_filter, trendingCategoryData, tranding_categories };

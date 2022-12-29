@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   mblMenu: false,
@@ -82,23 +82,24 @@ export const counterSlice = createSlice({
       state.sortedtrendingCategoryItemData = action.payload;
     },
     updatetrendingCategorySorText: (state, action) => {
+      console.log("action", action.payload);
       const sortText = action.payload;
       if (sortText === "Price: Low to High") {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort(
-            (a, b) => a.sortPrice - b.sortPrice
-          );
+          state.trendingCategoryItemData.sort((a, b) => a.price - b.price);
       } else if (sortText === "Price: high to low") {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort(
-            (a, b) => b.sortPrice - a.sortPrice
-          );
+          state.trendingCategoryItemData.sort((a, b) => b.price - a.price);
       } else if (sortText === "Recently Added") {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => a.addDate - b.addDate);
+          state.trendingCategoryItemData.sort(
+            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+          );
       } else if (sortText === "Auction Ending Soon") {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => b.addDate - a.addDate);
+          state.trendingCategoryItemData.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
       } else {
         state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
       }

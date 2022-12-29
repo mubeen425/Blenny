@@ -13,13 +13,15 @@ const Trending_categories_items = ({data}) => {
 	const [filterVal, setFilterVal] = useState(0);
 
 	const handleFilter = (category) => {
+
+		console.log("category: " + category);
 		if (category !== 'all') {
 			setItemdata(data.filter((item) => item.category === category));
 		} else {
 			setItemdata(data);
 		}
 	};
-
+console.log({itemdata})
 	const sortText = [
 		{
 			id: 1,
@@ -38,9 +40,10 @@ const Trending_categories_items = ({data}) => {
 			text: 'Auction Ending Soon',
 		},
 	];
-
+	useEffect(() => { setItemdata(data)},[data])
 	useEffect(() => {
-		dispatch(updateTrendingCategoryItemData(itemdata.slice(0, 8)));
+		console.log("dispatch call", itemdata)
+		dispatch(updateTrendingCategoryItemData(itemdata?.slice(0, 8)));
 	}, [itemdata]);
 
 	return (
@@ -105,7 +108,7 @@ const Trending_categories_items = ({data}) => {
 			</div>
 
 			{/* <!-- Grid --> */}
-			<CategoryItem data={data} />
+			<CategoryItem  />
 		</>
 	);
 };

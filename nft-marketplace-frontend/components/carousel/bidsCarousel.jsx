@@ -1,19 +1,19 @@
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
-import Image from "next/image";
-import "tippy.js/dist/tippy.css";
-import { bidsData } from "../../data/bids_data";
-import Link from "next/link";
-import Tippy from "@tippyjs/react";
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
-import { bidsModalShow } from "../../redux/counterSlice";
-import { useDispatch } from "react-redux";
-import Likes from "../likes";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'tippy.js/dist/tippy.css';
 
-const BidsCarousel = () => {
+import Tippy from '@tippyjs/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
+import { Navigation, Pagination, Scrollbar } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { bidsModalShow } from '../../redux/counterSlice';
+
+const BidsCarousel = ({data}) => {
   const dispatch = useDispatch();
   const handleclick = () => {
     console.log("clicked on ");
@@ -45,16 +45,16 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {bidsData.map((item) => {
-          const { id, image, title, bid_number, eth_number, react_number } =
+        {data?.map((item) => {
+          const { _id, img, name, price, owner, category } =
             item;
-          const itemLink = image
-            .split("/")
-            .slice(-1)
-            .toString()
-            .replace(".jpg", "");
+          console.log("imae", img)
+            const base64String = btoa(
+              String.fromCharCode(...new Uint8Array(img.data.data))
+            );
+          const itemLink = _id
           return (
-            <SwiperSlide className="text-white" key={id}>
+            <SwiperSlide className="text-white" >
               <article>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg text-jacarta-500">
                   <figure>
@@ -63,14 +63,14 @@ const BidsCarousel = () => {
                       <a>
                         <div className="w-full">
                           <Image
-                            src={image}
-                            alt={title}
+                            src={`data:image/png;base64,${base64String}`}
+                            alt={name}
                             height={230}
                             width={230}
                             layout="responsive"
                             objectFit="cover"
                             className="rounded-[0.625rem] w-full"
-                            loading="lazy"
+                            
                           />
                         </div>
                       </a>
@@ -80,7 +80,7 @@ const BidsCarousel = () => {
                     <Link href={"/item/" + itemLink}>
                       <a>
                         <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
-                          {title}
+                          {name}
                         </span>
                       </a>
                     </Link>
@@ -94,16 +94,16 @@ const BidsCarousel = () => {
                       </Tippy>
 
                       <span className="text-green text-sm font-medium tracking-tight">
-                        {eth_number} ETH
+                        {price} ETH
                       </span>
                     </span>
                   </div>
                   <div className="mt-2 text-sm">
                     <span className="dark:text-jacarta-300 text-jacarta-500">
-                      Current Bid
+                      Current Bid {" "}
                     </span>
                     <span className="dark:text-jacarta-100 text-jacarta-700">
-                      {bid_number} ETH
+                      {price} ETH
                     </span>
                   </div>
 
@@ -116,10 +116,10 @@ const BidsCarousel = () => {
                       Place bid
                     </button>
 
-                    <Likes
+                    {/* <Likes
                       like={react_number}
                       classes="flex items-center space-x-1"
-                    />
+                    /> */}
                   </div>
                 </div>
               </article>
