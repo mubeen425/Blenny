@@ -17,8 +17,10 @@ import More_items from './more_items';
 const Item = () => {
 	const [imageModal, setImageModal] = useState(false);
 	const [item, setItem] = useState();
-	const [user, setUser] = useState();
-	const [userImage, setUserImage] = useState();
+	const [owner, setOwner] = useState();
+	const [creator, setCreator] = useState();
+	const [ownerImage, setOwnerImage] = useState();
+	const [creatorImage, setCreatorImage] = useState();
 	const [itemImage, setItemImage] = useState();
 	const dispatch = useDispatch();
 	const router = useRouter();
@@ -34,21 +36,19 @@ const Item = () => {
 				const base64String = btoa(
 					String.fromCharCode(...new Uint8Array(res.data.img.data.data))
 				);
+				const base64OwnerString = btoa(
+					String.fromCharCode(...new Uint8Array(res.data.owner.profileImage.data.data))
+				);
+				setOwnerImage(base64OwnerString)
+				const base64CreatorString = btoa(
+					String.fromCharCode(...new Uint8Array(res.data.creator.profileImage.data.data))
+				);
+				setCreatorImage(base64CreatorString)
 				setItemImage(base64String);
+				console.log("itessssss", res.data, res.data.owner)
 				setItem(res.data);
-			  axiosInstance
-			  .get(`/user/profile/${res?.data?.owner}`)
-				  .then(resp => {
-				  console.log("call",resp.data);
-                  
-				  const base64UserString = btoa(
-					  String.fromCharCode(...new Uint8Array(resp.data.user.profileImage.data.data))
-				  );
-					  setUserImage(base64UserString)
-				
-				  setUser(resp.data.user);
-				})
-				.catch(err => console.log(err, "it has an error"));
+				setOwner(res.data.owner);
+				setCreator(res.data.creator);
 		  })
 		  .catch(err => console.log(err, "it has an error"));
 	  };
@@ -59,8 +59,8 @@ const Item = () => {
 			loadItem();
 		}
 	}, [router.query.id]);
-	console.log({item},{user},userImage ,itemImage)
-	
+	// console.log({item},{user},userImage ,itemImage)
+	console.log("creator user", creator)
 
 	return (
 		<>
@@ -173,12 +173,12 @@ const Item = () => {
 							<div className="mb-8 flex flex-wrap">
 								<div className="mr-8 mb-4 flex">
 									<figure className="mr-4 shrink-0">
-										<Link href="/user/avatar_6">
+										<Link href={`/user/${creator?.address}`}>
 											<a className="relative block">
 												{
-													userImage && <img
-													src={`data:image/png;base64,${userImage}`}
-													alt={user?.username}
+													creatorImage && <img
+													src={`data:image/png;base64,${creatorImage}`}
+													alt={creator?.username}
 													className="rounded-2lg h-12 w-12"
 													loading="lazy"
 													/>
@@ -200,9 +200,9 @@ const Item = () => {
 										<span className="text-jacarta-400 block text-sm dark:text-white">
 											Creator <strong>10% royalties</strong>
 										</span>
-										<Link href="/user/avatar_6">
+										<Link href={`/user/${creator?.address}`}>
 											<a className="text-accent block">
-												<span className="text-sm font-bold">{user?.username}</span>
+												<span className="text-sm font-bold">{creator?.username}</span>
 											</a>
 										</Link>
 									</div>
@@ -210,11 +210,11 @@ const Item = () => {
 
 								<div className="mb-4 flex">
 									<figure className="mr-4 shrink-0">
-										<Link href="/user/avatar_6">
+										<Link href={`/user/${owner?.address}`}>
 											<a className="relative block">
-												{!!userImage &&<img
-													src={`data:image/png;base64,${userImage}`}
-													alt={user?.username}
+												{!!creatorImage &&<img
+													src={`data:image/png;base64,${ownerImage}`}
+													alt={owner?.username}
 													className="rounded-2lg h-12 w-12"
 													loading="lazy"
 												/>}
@@ -235,9 +235,9 @@ const Item = () => {
 										<span className="text-jacarta-400 block text-sm dark:text-white">
 											Owned by
 										</span>
-										<Link href="/user/avatar_6">
+										<Link href={`/user/${owner?.address}`}>
 											<a className="text-accent block">
-												<span className="text-sm font-bold">{user?.username}</span>
+												<span className="text-sm font-bold">{owner?.username}</span>
 											</a>
 										</Link>
 									</div>

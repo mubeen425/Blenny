@@ -12,7 +12,6 @@ import Social_dropdown from '../../components/dropdown/Social_dropdown';
 import Meta from '../../components/Meta';
 import User_items from '../../components/user/User_items';
 import axiosInstance from '../../utils/axiosInterceptor';
-import { getItem } from '../../utils/localStorage';
 
 const User = () => {
 	const router = useRouter();
@@ -32,12 +31,11 @@ const User = () => {
 			setLikesImage(false);
 		}
 	};
-	
+	console.log(router.query.user);
 	useEffect(() => {
-		console.log("adsad", getItem("userAddress"))
-		if (getItem("userAddress")) {
+		if (router.query.user) {
 		axiosInstance
-			.get(`/user/profile/${getItem("userAddress")}`)
+			.get(`/user/profile/${router.query.user}`)
 			.then(res => {
 				console.log(res);
 				setUser(res?.data?.user);

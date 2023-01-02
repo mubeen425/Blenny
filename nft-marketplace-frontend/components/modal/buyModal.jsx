@@ -1,14 +1,13 @@
-import Link from "next/link";
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { buyModalHide } from "../../redux/counterSlice";
-import { Confirm_checkout } from "../metamask/Metamask";
-import { loadContracts } from "../../contractABI/interact.js";
-import axios from "axios";
-import { ethers } from "ethers";
-import { toast } from "react-toastify";
-import Image from "next/image";
-import axiosInstance from "../../utils/axiosInterceptor";
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import { loadContracts } from '../../contractABI/interact.js';
+import { buyModalHide } from '../../redux/counterSlice';
+import axiosInstance from '../../utils/axiosInterceptor';
+
 const BuyModal = () => {
   const { buyModal, categoryItemstate } = useSelector((state) => state.counter);
   const { payload } = categoryItemstate;

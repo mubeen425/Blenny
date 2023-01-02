@@ -64,6 +64,7 @@ const User_items = () => {
       .then((res) => setData(res.data))
       .catch((err) => console.log(err, "it has an error"));
   };
+  
   useEffect(() => {
     if (itemActive === 1) {
       loadOnSaleItems();

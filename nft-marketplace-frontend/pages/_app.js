@@ -1,17 +1,19 @@
-import "../styles/globals.css";
-import { ThemeProvider } from "next-themes";
-import Layout from "../components/layout";
-import { Provider, useSelector } from "react-redux";
-import { store } from "../redux/store";
-import { useRouter } from "next/router";
-import { MetaMaskProvider } from "metamask-react";
-import Meta from "../components/Meta";
-import UserContext from "../components/UserContext";
-import { useEffect, useRef } from "react";
-import { ToastContainer } from "react-toastify";
-// import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
-import "react-toastify/dist/ReactToastify.css";
+import '../styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 
+import { MetaMaskProvider } from 'metamask-react';
+import { ThemeProvider } from 'next-themes';
+import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+
+import Layout from '../components/layout';
+import Meta from '../components/Meta';
+import UserContext from '../components/UserContext';
+import { store } from '../redux/store';
+
+// import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const pid = router.asPath;
@@ -19,13 +21,6 @@ function MyApp({ Component, pageProps }) {
     scrollPos: 0
   });
 
-  useEffect(() => {
-    // if (pid === '/home/home_8') {
-    // 	const html = document.querySelector('html');
-    // 	html.classList.remove('light');
-    // 	html.classList.add('dark');
-    // }
-  }, []);
 
   return (
     <>

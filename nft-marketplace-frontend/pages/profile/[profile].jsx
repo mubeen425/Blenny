@@ -9,13 +9,13 @@ import axiosInstance from '../../utils/axiosInterceptor';
 import { getItem } from '../../utils/localStorage';
 
 const Edit_user = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [profilePhoto, setProfilePhoto] = useState();
   const [coverPhoto, setCoverPhoto] = useState();
   const [preview, setPreview] = useState();
   const [coverPreview, setCoverPreview] = useState();
   const [profile, setProfile] = useState();
-
+  console.log("router", router.query.profile);
   const [user, setUser] = useState({
     username: "",
     bio: "",
@@ -62,9 +62,9 @@ const Edit_user = () => {
     [profilePhoto]
   );
   useEffect(() => {
-    if (getItem("userAddress")) {
+    if (router.query.profile) {
       axiosInstance
-        .get(`/user/profile/${getItem("userAddress")}`)
+        .get(`/user/profile/${router.query.profile}`)
         .then(res => {
           console.log(res);
 			setProfile(res.data.user);
@@ -94,7 +94,7 @@ const Edit_user = () => {
         })
         .catch(err => console.log(err));
     }
-  }, []);
+  }, [router.query.profile]);
   console.log("profile", profile);
   useEffect(
     () => {
