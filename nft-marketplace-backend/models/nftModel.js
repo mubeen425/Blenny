@@ -26,11 +26,16 @@ const nftSchema = new mongoose.Schema(
       contentType: String
     },
     isBuy: {
-      type: Boolean
+      type: Boolean,
+      default: false
+    },
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "USERS"
     },
     owner: {
-      type: String,
-      required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "USERS"
     },
     category: {
       type: String,
