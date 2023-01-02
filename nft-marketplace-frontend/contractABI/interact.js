@@ -1,9 +1,9 @@
-import { pinJSONToIPFS } from "./pinata.js";
-import { ethers } from "ethers";
-import NFT from "./nft.json";
-import Marketplace from "./marketplace.json";
-import axios from "axios";
-import axiosInstance from "../utils/axiosInterceptor.js";
+import { ethers } from 'ethers';
+
+import axiosInstance from '../utils/axiosInterceptor.js';
+import Marketplace from './marketplace.json';
+import NFT from './nft.json';
+import { pinJSONToIPFS } from './pinata.js';
 
 export const loadContracts = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -11,16 +11,12 @@ export const loadContracts = async () => {
 
   // Get deployed copies of contracts
   const marketplace = new ethers.Contract(
-    "0x71E80Fd0Ca79A699F74400A01C0bA253B3e51413",
+    "0x65F892616d9D533157E7818c799EbF3e3b18Ca84",
     Marketplace.abi,
     signer
   );
   //setMarketplace(marketplace)
-  const nft = new ethers.Contract(
-    "0xFCDeb411d5155e7eAFA3249d2E963446786a3aD5",
-    NFT.abi,
-    signer
-  );
+  const nft = new ethers.Contract("0x4A913264F676ECf731a10a45807480222A4FaAc5", NFT.abi, signer);
 
   //wallet address
 
@@ -67,13 +63,8 @@ export const connectWallet = async () => {
           <p>
             {" "}
             🦊{" "}
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href={`https://metamask.io/download.html`}
-            >
-              You must install Metamask, a virtual Ethereum wallet, in your
-              browser.
+            <a target="_blank" rel="noreferrer" href={`https://metamask.io/download.html`}>
+              You must install Metamask, a virtual Ethereum wallet, in your browser.
             </a>
           </p>
         </span>
@@ -113,13 +104,8 @@ export const getCurrentWalletConnected = async () => {
           <p>
             {" "}
             🦊{" "}
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href={`https://metamask.io/download.html`}
-            >
-              You must install Metamask, a virtual Ethereum wallet, in your
-              browser.
+            <a target="_blank" rel="noreferrer" href={`https://metamask.io/download.html`}>
+              You must install Metamask, a virtual Ethereum wallet, in your browser.
             </a>
           </p>
         </span>
@@ -197,9 +183,7 @@ export const mintNFT = async (
       formData.append("isBuy", false);
       formData.append("owner", walletAddress);
 
-      await axiosInstance
-        .post("/nft/createNft", formData, {})
-        .then((response) => console.log(response));
+      await axiosInstance.post("/nft/createNft", formData, {}).then((response) => console.log(response));
       //activity
       await axiosInstance
         .post("/activity/", {
@@ -254,9 +238,7 @@ export const mintNFT = async (
 
   return {
     success: true,
-    status:
-      "Check out your transaction on Etherscan: https://testnet.bscscan.com/tx/" +
-      link.hash,
+    status: "Check out your transaction on Etherscan: https://testnet.bscscan.com/tx/" + link.hash,
     id: nftId
   };
 };

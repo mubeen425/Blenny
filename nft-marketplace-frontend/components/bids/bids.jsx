@@ -2,22 +2,32 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'tippy.js/dist/tippy.css';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import axiosInstance from '../../utils/axiosInterceptor';
 import BidsCarousel from '../carousel/bidsCarousel';
 import { HeadLine } from '../component';
 
-const Bids = ({ classes = "pt-10 pb-24", bgWhite, data }) => {
+const Bids = ({ classes = "pt-10 pb-24", bgWhite }) => {
+  const [data, setData] = useState();
+
+  const loadOnSaleItems = async () => {
+    await axiosInstance
+      .post("/nft/get-auction-nfts")
+      .then(res => {
+        setData(res.data);
+      })
+      .catch(err => console.log(err, "it has an error"));
+  };
+  useEffect(() => {
+    loadOnSaleItems();
+  }, []);
   return (
     <section className={classes}>
       {/* <!-- Hot Bids --> */}
       {bgWhite &&
         <picture className="pointer-events-none absolute inset-0 -z-10 dark:hidden">
-          <img
-            src="/images/gradient_light.jpg"
-            alt="gradient"
-            className="h-full w-full"
-          />
+          <img src="/images/gradient_light.jpg" alt="gradient" className="h-full w-full" />
         </picture>}
       <div className="container">
         <HeadLine

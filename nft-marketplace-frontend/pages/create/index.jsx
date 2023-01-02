@@ -12,27 +12,15 @@ import CategoryDropdown from '../../components/dropdown/categoryDropdown';
 import Collection_dropdown2 from '../../components/dropdown/collection_dropdown2';
 import Meta from '../../components/Meta';
 import Proparties_modal from '../../components/modal/proparties_modal';
-import { loadContracts } from '../../contractABI/interact.js';
-import { pinJSONToIPFS } from '../../contractABI/pinata.js';
+import { loadContracts } from '../../contractABI/interact';
+import { pinJSONToIPFS } from '../../contractABI/pinata';
 import { tranding_categories } from '../../data/categories_data';
 import { collectionDropdown2_data, EthereumDropdown2_data } from '../../data/dropdown';
 import { showPropatiesModal } from '../../redux/counterSlice';
 import axiosInstance from '../../utils/axiosInterceptor';
 
 const Create = () => {
-  const fileTypes = [
-    "JPG",
-    "PNG",
-    "GIF",
-    "SVG",
-    "MP4",
-    "WEBM",
-    "MP3",
-    "WAV",
-    "OGG",
-    "GLB",
-    "GLTF"
-  ];
+  const fileTypes = ["JPG", "PNG", "GIF", "SVG", "MP4", "WEBM", "MP3", "WAV", "OGG", "GLB", "GLTF"];
 
   const router = useRouter();
   const { loggedin } = useSelector(state => state.counter);
@@ -50,8 +38,7 @@ const Create = () => {
 
   const [input, setinput] = useState({
     image: "",
-    name: "",
-    // externalLink: "",
+    name: "", // externalLink: "",
     description: "",
     Collection: null,
     Unlockable_Content: false,
@@ -60,7 +47,8 @@ const Create = () => {
     Blockchain: "Ethereum",
     FreezeMetadata: "",
     price: "",
-    category: "art"
+    category: "art",
+    type: "fixed"
   });
 
   const mintNFT = async () => {
@@ -68,23 +56,17 @@ const Create = () => {
     console.log("error call", input);
     if (
       input.name == "" ||
-      // input.FreezeMetadata == "" &&
       input.price == "" ||
       input.image == "" ||
       input.description == "" ||
       input.category == ""
     ) {
-      setError({
-        status: true,
-        message: "Please fill all fields"
-      });
+      // input.FreezeMetadata == "" &&
+      setError({ status: true, message: "Please fill all fields" });
       return;
     }
     setLoading(true);
-    setError({
-      status: false,
-      message: ""
-    });
+    setError({ status: false, message: "" });
 
     const { marketplace, nft, address, status } = await loadContracts();
 
@@ -98,10 +80,7 @@ const Create = () => {
     const pinataResponse = await pinJSONToIPFS(metadata);
     console.log({ pinataResponse });
     if (!pinataResponse.success) {
-      setError({
-        status: true,
-        message: "Something went wrong please Try again!"
-      });
+      setError({ status: true, message: "Something went wrong please Try again!" });
       return;
     }
     const tokenURI = pinataResponse.pinataUrl;
@@ -110,19 +89,14 @@ const Create = () => {
     console.log("price", input.price);
     try {
       const mint = await nft.mint(tokenURI);
-      setSuccess({
-        status: false,
-        message: "Minting your NFT..."
-      });
+      setSuccess({ status: false, message: "Minting your NFT..." });
       await mint.wait();
       console.log({ mint });
 
       const id = await nft.tokenCount();
+      console.log("id", id);
       const nftApprove = await nft.approve(marketplace.address, id);
-      setSuccess({
-        status: false,
-        message: "Approving your NFT..."
-      });
+      setSuccess({ status: false, message: "Approving your NFT..." });
       await nftApprove.wait();
       console.log("nftApprove", nftApprove);
 
@@ -132,10 +106,7 @@ const Create = () => {
       console.log("listing", itemPrice);
 
       const makeItem = await marketplace.makeItem(nft.address, id, itemPrice);
-      setSuccess({
-        status: false,
-        message: "Uploading NFT..."
-      });
+      setSuccess({ status: false, message: "Uploading NFT..." });
       console.log("make item", makeItem);
       await makeItem.wait();
       console.log("waiting.... end");
@@ -151,13 +122,11 @@ const Create = () => {
         formData.append("isBuy", false);
         formData.append("owner", address);
         formData.append("category", input.category);
+        formData.append("saleType", input.type);
         console.log({ formData }, input.image);
         const res = await axiosInstance.post("/nft/createNft", formData, {});
 
-        setSuccess({
-          status: true,
-          message: "Congratulations NFT created successfully!"
-        });
+        setSuccess({ status: true, message: "Congratulations NFT created successfully!" });
         setLoading(false);
         setTimeout(() => {
           router.push("/");
@@ -165,62 +134,39 @@ const Create = () => {
         console.log("res", res);
       }
     } catch (err) {
-      console.log("create error", err.code);
+      console.log("create error", err);
       if (err.code === "ACTION_REJECTED") {
         setLoading(false);
-        setError({
-          status: true,
-          message: "Request rejected by user"
-        });
+        setError({ status: true, message: "Request rejected by user" });
       } else {
         setLoading(false);
-        setError({
-          status: true,
-          message: "Something went wrong! Please try again"
-        });
+        setError({ status: true, message: "Something went wrong! Please try again" });
       }
     }
   };
 
   // Get value from the collection component for the input.Collection
   const Get_collection_Value = Collectionvalue => {
-    setinput(prevState => ({
-      ...prevState,
-      Collection: { Collectionvalue }
-    }));
+    setinput(prevState => ({ ...prevState, Collection: { Collectionvalue } }));
   };
 
   // Get value from the category component for the input.Collection
   const Get_Category_Value = categoryValue => {
     console.log("category value", categoryValue);
-    setinput(prevState => ({
-      ...prevState,
-      category: categoryValue
-    }));
+    setinput(prevState => ({ ...prevState, category: categoryValue }));
   };
   // Get value from the collection component for the input.Blockchain
   const Get_Value_Blockchain = Blockchainvalue => {
-    setinput(prevState => ({
-      ...prevState,
-      // Blockchain: { Blockchainvalue }, //old
-      Blockchain: 97
-    }));
+    setinput(prevState => ({ ...prevState, Blockchain: 97 })); // Blockchain: { Blockchainvalue }, //old
   };
   const dispatch = useDispatch();
 
   const handleChangeImage = file => {
     setFile(file.name);
-    setinput(prevState => ({
-      ...prevState,
-      // image: file.name, //old
-      image: file
-    }));
+    setinput(prevState => ({ ...prevState, image: file })); // image: file.name, //old
   };
   const handleChange = e => {
-    setinput(prevState => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
+    setinput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
   const popupItemData = [
@@ -230,18 +176,8 @@ const Create = () => {
       text: "Textual traits that show up as rectangles.",
       icon: "proparties-icon"
     },
-    {
-      id: 2,
-      name: "levels",
-      text: "Numerical traits that show as a progress bar.",
-      icon: "level-icon"
-    },
-    {
-      id: 3,
-      name: "stats",
-      text: "Numerical traits that just show as numbers.",
-      icon: "stats-icon"
-    }
+    { id: 2, name: "levels", text: "Numerical traits that show as a progress bar.", icon: "level-icon" },
+    { id: 3, name: "stats", text: "Numerical traits that just show as numbers.", icon: "stats-icon" }
   ];
   return (
     <div>
@@ -249,11 +185,7 @@ const Create = () => {
       {/* <!-- Create --> */}
       <section className="relative py-24">
         <picture className="pointer-events-none absolute inset-0 -z-10 dark:hidden">
-          <img
-            src="/images/gradient_light.jpg"
-            alt="gradient"
-            className="h-full w-full"
-          />
+          <img src="/images/gradient_light.jpg" alt="gradient" className="h-full w-full" />
         </picture>
         <div className="container">
           <h1 className="font-display text-jacarta-700 py-16 text-center text-4xl font-medium dark:text-white">
@@ -272,9 +204,7 @@ const Create = () => {
                 ? <p className="dark:text-jacarta-300 text-2xs mb-3">
                     successfully uploaded : {file}
                   </p>
-                : <p className="dark:text-jacarta-300 text-2xs mb-3">
-                    Drag or choose your file to upload
-                  </p>}
+                : <p className="dark:text-jacarta-300 text-2xs mb-3">Drag or choose your file to upload</p>}
 
               <div className="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 group relative flex max-w-md flex-col items-center justify-center rounded-lg border-2 border-dashed bg-white py-20 px-5 text-center">
                 <div className="relative z-10 cursor-pointer">
@@ -289,29 +219,25 @@ const Create = () => {
                     <path d="M16 13l6.964 4.062-2.973.85 2.125 3.681-1.732 1-2.125-3.68-2.223 2.15L16 13zm-2-7h2v2h5a1 1 0 0 1 1 1v4h-2v-3H10v10h4v2H9a1 1 0 0 1-1-1v-5H6v-2h2V9a1 1 0 0 1 1-1h5V6zM4 14v2H2v-2h2zm0-4v2H2v-2h2zm0-4v2H2V6h2zm0-4v2H2V2h2zm4 0v2H6V2h2zm4 0v2h-2V2h2zm4 0v2h-2V2h2z" />
                   </svg>
                   <p className="dark:text-jacarta-300 mx-auto max-w-xs text-xs">
-                    JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF. Max
-                    size: 100 MB
+                    JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF. Max size: 100 MB
                   </p>
                 </div>
                 <div className="dark:bg-jacarta-600 bg-jacarta-50 absolute inset-4 cursor-pointer rounded opacity-0 group-hover:opacity-100 ">
                   <FileUploader
                     handleChange={handleChangeImage}
-                    //types={fileTypes}
                     name="image"
                     classes="file-drag"
-                    maxSize={100}
+                    maxSize={
+                      100 //types={fileTypes}
+                    }
                     minSize={0}
                   />
                 </div>
               </div>
             </div>
-
             {/* <!-- Name --> */}
             <div className="mb-6">
-              <label
-                htmlFor="item-name"
-                className="font-display text-jacarta-700 mb-2 block dark:text-white"
-              >
+              <label htmlFor="item-name" className="font-display text-jacarta-700 mb-2 block dark:text-white">
                 Name<span className="text-red">*</span>
               </label>
               <input
@@ -325,7 +251,6 @@ const Create = () => {
                 required
               />
             </div>
-
             {/* <!-- External Link --> Hidden */}
             <div className=" hidden mb-6">
               <label
@@ -335,9 +260,8 @@ const Create = () => {
                 External link
               </label>
               <p className="dark:text-jacarta-300 text-2xs mb-3">
-                We will include a link to this URL on this {"item's"} detail
-                page, so that users can click to learn more about it. You are
-                welcome to link to your own webpage with more details.
+                We will include a link to this URL on this {"item's"} detail page, so that users can click to
+                learn more about it. You are welcome to link to your own webpage with more details.
               </p>
               <input
                 value={input.externalLink}
@@ -349,7 +273,6 @@ const Create = () => {
                 placeholder="https://yoursite.io/item/123"
               />
             </div>
-
             {/* <!-- Description --> */}
             <div className="mb-6">
               <label
@@ -359,8 +282,8 @@ const Create = () => {
                 Description
               </label>
               <p className="dark:text-jacarta-300 text-2xs mb-3">
-                The description will be included on the {"item's"} detail page
-                underneath its image. Markdown syntax is supported.
+                The description will be included on the {"item's"} detail page underneath its image. Markdown
+                syntax is supported.
               </p>
               <textarea
                 value={input.description}
@@ -373,24 +296,16 @@ const Create = () => {
                 placeholder="Provide a detailed description of your item."
               />
             </div>
-
             {/* <!-- Collection --> */}
             <div className="relative">
               <div>
-                <label className="font-display text-jacarta-700 mb-2 block dark:text-white">
-                  Collection
-                </label>
+                <label className="font-display text-jacarta-700 mb-2 block dark:text-white">Collection</label>
                 <div className="mb-3 flex items-center space-x-2">
                   <p className="dark:text-jacarta-300 text-2xs">
                     This is the collection where your item will appear.
                     <Tippy
                       theme="tomato-theme"
-                      content={
-                        <span>
-                          Moving items to a different collection may take up to
-                          30 minutes.
-                        </span>
-                      }
+                      content={<span>Moving items to a different collection may take up to 30 minutes.</span>}
                     >
                       <span className="inline-block">
                         <svg
@@ -418,7 +333,6 @@ const Create = () => {
                 />
               </div>
             </div>
-
             {/* <!-- Properties --> */}
             {popupItemData.map(({ id, name, text, icon }) => {
               return (
@@ -460,11 +374,8 @@ const Create = () => {
                 </div>
               );
             })}
-
             <Proparties_modal />
-
             {/* <!-- Properties --> */}
-
             {/* <!-- Unlockable Content --> */}
             <div className="dark:border-jacarta-600 border-jacarta-100 relative border-b py-6">
               <div className="flex items-center justify-between">
@@ -485,8 +396,7 @@ const Create = () => {
                       Unlockable Content
                     </label>
                     <p className="dark:text-jacarta-300">
-                      Include unlockable content that can only be revealed by
-                      the owner of the item.
+                      Include unlockable content that can only be revealed by the owner of the item.
                     </p>
                   </div>
                 </div>
@@ -499,13 +409,12 @@ const Create = () => {
                     }));
                   }}
                   type="checkbox"
-                  // value="checkbox"
                   name="Unlockable_Content"
                   className="checked:bg-accent checked:focus:bg-accent checked:hover:bg-accent after:bg-jacarta-400 bg-jacarta-100 relative h-6 w-[2.625rem] cursor-pointer appearance-none rounded-full border-none after:absolute after:top-[0.1875rem] after:left-[0.1875rem] after:h-[1.125rem] after:w-[1.125rem] after:rounded-full after:transition-all checked:bg-none checked:after:left-[1.3125rem] checked:after:bg-white focus:ring-transparent focus:ring-offset-0"
-                />
+                />{" "}
+                // value="checkbox"
               </div>
             </div>
-
             {/* <!-- Explicit & Sensitive Content --> */}
             <div className="dark:border-jacarta-600 border-jacarta-100 relative mb-6 border-b py-6">
               <div className="flex items-center justify-between">
@@ -531,10 +440,9 @@ const Create = () => {
                       <Tippy
                         content={
                           <span>
-                            Setting your asset as explicit and sensitive
-                            content, like pornography and other not safe for
-                            work (NSFW) content, will protect users with safe
-                            search while browsing Blenny
+                            Setting your asset as explicit and sensitive content, like pornography and other
+                            not safe for work (NSFW) content, will protect users with safe search while
+                            browsing Blenny
                           </span>
                         }
                       >
@@ -569,7 +477,6 @@ const Create = () => {
               </div>
             </div>
             {/* Category */}
-
             <div className="relative">
               <div>
                 <label className="font-display text-jacarta-700 mb-2 block dark:text-white">
@@ -579,10 +486,7 @@ const Create = () => {
 
               {/* dropdown */}
               <div className="my-1 cursor-pointer">
-                <CategoryDropdown
-                  data={tranding_categories}
-                  Get_Value={Get_Category_Value}
-                />
+                <CategoryDropdown data={tranding_categories} Get_Value={Get_Category_Value} />
               </div>
             </div>
             {/* <!-- Supply --> */}
@@ -600,10 +504,9 @@ const Create = () => {
                   <Tippy
                     content={
                       <span>
-                        Setting your asset as explicit and sensitive content,
-                        like pornography and other not safe for work (NSFW)
-                        content, will protect users with safe search while
-                        browsing Blenny.
+                        Setting your asset as explicit and sensitive content, like pornography and other not
+                        safe for work (NSFW) content, will protect users with safe search while browsing
+                        Blenny.
                       </span>
                     }
                   >
@@ -633,7 +536,6 @@ const Create = () => {
                 placeholder="1"
               />
             </div>
-
             {/* <!-- Blockchain --> */}
             <div className=" hidden mb-6">
               <label
@@ -645,14 +547,65 @@ const Create = () => {
 
               {/* dropdown */}
               <div className=" dropdown relative mb-4 cursor-pointer ">
-                <Collection_dropdown2
-                  data={EthereumDropdown2_data}
-                  Get_Value={Get_Value_Blockchain}
-                />
+                <Collection_dropdown2 data={EthereumDropdown2_data} Get_Value={Get_Value_Blockchain} />
               </div>
             </div>
+            {/* <!-- Select type auction or fixed price --> */}
+            <div className="mb-6">
+              <div className="mb-2 flex items-center space-x-2">
+                <label
+                  htmlFor="item-freeze-metadata"
+                  className="font-display text-jacarta-700 block dark:text-white"
+                >
+                  {/* Freeze metadata */} Select Type
+                </label>
+              </div>
+              <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                  <div className="flex items-center pl-3">
+                    <input
+                      id="horizontal-list-radio-license"
+                      defaultChecked={true}
+                      type="radio"
+                      value="fixed"
+                      onChange={() => {
+                        setinput(prevState => ({ ...prevState, type: "fixed" }));
+                      }}
+                      name="list-radio"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+                    <label
+                      htmlFor="horizontal-list-radio-license"
+                      className="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      Fixed Price
+                    </label>
+                  </div>
+                </li>
+                <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                  <div className="flex items-center pl-3">
+                    <input
+                      id="horizontal-list-radio-id"
+                      type="radio"
+                      value="auction"
+                      onChange={() => {
+                        setinput(prevState => ({ ...prevState, type: "auction" }));
+                      }}
+                      name="list-radio"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+                    <label
+                      htlFor="horizontal-list-radio-id"
+                      className="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      Auction
+                    </label>
+                  </div>
+                </li>
+              </ul>
+            </div>
 
-            {/* <!-- Freeze metadata --> */}
+            {/* FReeze MetaData */}
             <div className="mb-6">
               <div className="mb-2 flex items-center space-x-2">
                 <label
@@ -715,9 +668,7 @@ const Create = () => {
                 placeholder="Enter Price."
               />
             </div>
-
             {/* <!-- Submit --> */}
-
             <div className="flex flex-col md:flex-row text-center space-x-6 ">
               {loggedin
                 ? <span>
@@ -748,26 +699,21 @@ const Create = () => {
                         </div>
                       : <button
                           id="CreateButton"
-                          // onClick={CreateNFT}
-                          onClick={mintNFT}
+                          onClick={
+                            mintNFT // onClick={CreateNFT}
+                          }
                           className=" bg-accent-dark cursor-pointer rounded-full py-3 px-8 text-center font-semibold text-white transition-all"
                         >
                           Create
                         </button>}
                     {error.status === true &&
-                      <p
-                        id="Error"
-                        className="py-3 font-semibold text-red transition-all"
-                      >
+                      <p id="Error" className="py-3 font-semibold text-red transition-all">
                         <span>
                           {error.message}
                         </span>
                       </p>}
                     {success.status === true &&
-                      <p
-                        id="Error"
-                        className="py-3 font-semibold text-green transition-all"
-                      >
+                      <p id="Error" className="py-3 font-semibold text-green transition-all">
                         <span>
                           {success.message}
                         </span>
@@ -781,10 +727,7 @@ const Create = () => {
                         </button>{" "}
                       </a>
                     </Link>
-                    <p
-                      id="Error"
-                      className=" py-3 font-semibold text-red transition-all"
-                    >
+                    <p id="Error" className=" py-3 font-semibold text-red transition-all">
                       <span>You have to login first</span>
                     </p>
                   </span>}
