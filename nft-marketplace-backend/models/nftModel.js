@@ -37,6 +37,11 @@ const nftSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "USERS"
     },
+    saleType: {
+      type: String,
+      required: true,
+      default: "fixed"
+    },
     category: {
       type: String,
       required: true,

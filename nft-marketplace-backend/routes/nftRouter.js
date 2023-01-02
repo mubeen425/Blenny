@@ -35,7 +35,8 @@ router.post("/createNft", upload.single("nftImage"), async (req, res) => {
       isBuy: false,
       owner: user._id,
       creator: user._id,
-      category: req.body.category
+      category: req.body.category,
+      saleType: req.body.saleType
     });
     saveImage
       .save()
@@ -122,6 +123,32 @@ router.post("/getNft", async (req, res, next) => {
         }
       ]);
     }
+    console.log("nft", nfts);
+    if (nfts) {
+      res.status(200).json(nfts);
+      return;
+    }
+    res.status(400).json({ msg: "No data found" });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+});
+router.post("/get-auction-nfts", async (req, res, next) => {
+  let nfts = [];
+  try {
+    console.log("first call");
+
+    nfts = await NFTs.find({
+      saleType: "auction"
+    }).populate([
+      {
+        path: "owner"
+      },
+      {
+        path: "creator"
+      }
+    ]);
+
     console.log("nft", nfts);
     if (nfts) {
       res.status(200).json(nfts);
